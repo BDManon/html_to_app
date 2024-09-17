@@ -79,14 +79,23 @@ fetch("https://jsonplaceholder.typicode.com/users").then((response) => {
     if(!response.ok) {
         // Si la réponse n'est pas valide, afficher un message d'erreur, en gérant les cas 404 et autres
         if(response.status === 404)
-            throw new Error("The server responded with a 404 error");
+            throw new Error("Le serveur n'a pas trouvé la ressource demandée");
         else
-            throw new Error("The server responded with an error");
+            throw new Error("Une erreur s'est produite dans le serveur");
     }else {
         // Si la réponse est valide, retourner les données au format JSON
         return response.json();
     }
 }).then((users) => {
+    console.log("Users", users);
+    if(users.length === 0){
+        const tr = document.createElement("tr");
+        const td = document.createElement("td");
+        td.innerText = "Aucun utilisateur trouvé";
+        td.colSpan = 3;
+        tr.appendChild(td);
+        document.querySelector("tbody").appendChild(tr);
+    }
     // Une fois les données reçues, les afficher dans le tableau en créant une ligne par utilisateur
     users.forEach((user) => {
         // Créer les cellules correspondantes pour le nom, le nom d'utilisateur et l'email
